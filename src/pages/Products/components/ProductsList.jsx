@@ -1,55 +1,54 @@
 import React from 'react';
-import { Table, Button } from 'antd';
-import {connect} from 'umi';
+import { Table, Button, Space } from 'antd';
+import { connect } from 'umi';
 import { PropertySafetyFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const columns = (onEdit, onDelete) => [
   {
-    title: "Name",
-    dataIndex: "name",
+    title: 'Name',
+    dataIndex: 'name',
     sorter: true,
   },
   {
-    title: "Day of birth",
-    dataIndex: "dayOfBirth",
+    title: 'Day of birth',
+    dataIndex: 'dayOfBirth',
   },
   {
-    title: "Gender",
-    dataIndex: "gender",
+    title: 'Gender',
+    dataIndex: 'gender',
   },
   {
-    title: "Email",
-    dataIndex: "email",
+    title: 'Email',
+    dataIndex: 'email',
   },
   {
-    title: "",
-    dataIndex: "",
+    title: '',
+    dataIndex: '',
     render: (value, row) => (
       <>
-        <Button
-          onClick={() => onEdit(row)}
-          className="mr-2"
-          icon={<EditOutlined />}
-        />
-        <Button onClick={() => onDelete(row)} icon={<DeleteOutlined />} />
+        <Space>
+          <Button onClick={() => onEdit(row)} className="mr-2" icon={<EditOutlined />} />
+          <Button onClick={() => onDelete(row)} icon={<DeleteOutlined />} />
+        </Space>
       </>
     ),
   },
 ];
 
-const ProductList = props => {
-
+const ProductList = (props) => {
   const onEditRow = (row) => {
-    console.log("edit", row);
+    console.log('edit', row);
     // this.setState({ visible: true, editData: row });
   };
 
   const onDeleteRow = (row) => {
-    const {dispatch} = props;
-    // console.log("delete", row, props);
+    const { dispatch } = props;
     dispatch({
       type: 'products/deleteProduct',
       payload: row.id,
+      onComplete: (res) => {
+        console.log(res);
+      },
     });
   };
 

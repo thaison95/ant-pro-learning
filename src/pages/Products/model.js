@@ -14,23 +14,18 @@ const ProductsModel = {
         payload: response,
       });
     },
-    *createProduct({ payload }, { call, put }) {
+    *createProduct({ payload }, { call }) {
       yield call(createProduct, payload);
     },
-    *deleteProduct({ payload }, { call, put }) {
-      yield call(deleteProduct, payload);
+    *deleteProduct({ payload, onComplete }, { call }) {
+      const res = yield call(deleteProduct, payload);
+      onComplete(res);
     },
   },
   reducers: {
     saveProducts(state, action) {
       return { ...state, productsList: action.payload || [] };
     },
-    ['deleteProduct/@@end'](state, action) {
-      return { ...state, lastAction: action.type };
-    },
-    ['createProduct/@@end'](state, action) {
-      return { ...state, lastAction: action.type };
-    }
   },
 };
 export default ProductsModel;

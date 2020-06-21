@@ -1,9 +1,9 @@
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { useState, useEffect } from 'react';
 import { Spin, Button, Space } from 'antd';
+import { connect } from 'umi';
 import styles from './index.less';
 import ProductList from './components/ProductsList';
-import { connect } from 'umi';
 import CreateUpdateProduct, { MODE } from './components/CreateUpdateProduct';
 
 const ProductsPage = (props) => {
@@ -12,7 +12,7 @@ const ProductsPage = (props) => {
   useEffect(() => {
     const { dispatch } = props;
     dispatch({
-      type: 'products/fetchProducts',
+      type: 'products/fetchProducts'
     });
   }, []);
 
@@ -39,7 +39,7 @@ const ProductsPage = (props) => {
     const { dispatch } = props;
     dispatch({
       type: 'products/createProduct',
-      payload: values,
+      payload: values
     });
   };
 

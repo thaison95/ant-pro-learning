@@ -20,7 +20,7 @@ export const MODE = {
 
 const CreateUpdateProduct = props => {
   const [form] = Form.useForm();
-  
+
   useEffect(() => {
     if (props.visible && props.mode === MODE.UPDATE
 		) {
