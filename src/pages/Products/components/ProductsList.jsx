@@ -10,16 +10,16 @@ const columns = (onEdit, onDelete) => [
     sorter: true,
   },
   {
-    title: 'Day of birth',
-    dataIndex: 'dayOfBirth',
+    title: 'Price',
+    dataIndex: 'price',
   },
   {
-    title: 'Gender',
-    dataIndex: 'gender',
+    title: 'Stock',
+    dataIndex: 'stock',
   },
   {
-    title: 'Email',
-    dataIndex: 'email',
+    title: 'View count',
+    dataIndex: 'viewCount',
   },
   {
     title: '',
@@ -52,12 +52,20 @@ const ProductList = (props) => {
     });
   };
 
+  const onTableChange = (pagination) => {
+    console.log(pagination);
+    props.onPaging(pagination.current);
+  }
+
   return (
     <>
       <Table
         rowKey="id"
         columns={columns(onEditRow, onDeleteRow)}
         dataSource={props.productsList}
+        onChange={onTableChange}
+        pagination={props.pagination}
+        loading={props.loading}
       />
     </>
   );

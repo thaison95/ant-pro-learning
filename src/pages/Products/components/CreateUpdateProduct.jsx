@@ -36,9 +36,10 @@ const CreateUpdateProduct = props => {
 			.validateFields()
 			.then((values) => {
 				if (props.mode === MODE.UPDATE) {
-					props.onSubmit({ ...values, id: this.props.editData.id });
+					// props.onSubmit({ ...values, id: this.props.editData.id });
 				} else {
-					props.onSubmit(values);
+				  const params = { ...values, stock: +values.stock, price: +values.price};
+					props.onSubmit(params);
 				}
 			})
 			.catch((errorInfo) => {
@@ -80,35 +81,27 @@ const CreateUpdateProduct = props => {
 							<Input />
 						</Form.Item>
 						<Form.Item
-							name="dayOfBirth"
-							label="Day of birth"
+							name="price"
+							label="Price"
 							rules={[
 								{
 									required: true,
 								},
 							]}
 						>
-							<DatePicker />
+              <Input />
 						</Form.Item>
-						<Form.Item name="gender" label="Gender">
-							<Select
-								getPopupContainer={(triggerNode) => triggerNode.parentNode}
-							>
-								<Option value="Male">Male</Option>
-								<Option value="Female">Female</Option>
-							</Select>
-						</Form.Item>
-						<Form.Item
-							name="email"
-							label="Email"
-							rules={[
-								{
-									type: "email",
-								},
-							]}
-						>
-							<Input />
-						</Form.Item>
+            <Form.Item
+              name="stock"
+              label="Stock"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 					</Form>
 				</Spin>
 			</Modal>

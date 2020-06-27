@@ -31,3 +31,12 @@ export function setAuthority(authority) {
 
   reloadAuthorized();
 }
+
+export function getAccessToken() {
+  const accessToken = localStorage.getItem('access_token') || '';
+  return accessToken;
+}
+
+export function setAccessToken(token) {
+  localStorage.setItem('access_token', token);
+}

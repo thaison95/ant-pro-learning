@@ -61,6 +61,10 @@ const Login = props => {
               props.onSubmit(values);
             }
           }}
+          initialValues={{
+            userName: 'admin',
+            password: 'Sang@123'
+          }}
         >
           {tabs.length ? (
             <React.Fragment>

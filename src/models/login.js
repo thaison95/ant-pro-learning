@@ -1,8 +1,9 @@
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import { fakeAccountLogin } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
+import { setAuthority, setAccessToken } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+import { setTokenHeader } from '@/utils/request';
 
 const Model = {
   namespace: 'login',
@@ -17,7 +18,7 @@ const Model = {
         payload: response,
       }); // Login successfully
 
-      if (response.status === 'ok') {
+      if (response.isSucceed) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -57,6 +58,8 @@ const Model = {
   reducers: {
     changeLoginStatus(state, { payload }) {
       setAuthority(payload.currentAuthority);
+      setAccessToken(payload.resultObj);
+      setTokenHeader(payload.resultObj);
       return { ...state, status: payload.status, type: payload.type };
     },
   },

@@ -4,11 +4,16 @@ const ProductsModel = {
   namespace: 'products',
   state: {
     productsList: [],
+    pagingConfig: {
+      pageSize: 10,
+      current: 1,
+      total: 0,
+    },
     lastAction: '',
   },
   effects: {
-    *fetchProducts(_, { call, put }) {
-      const response = yield call(getProducts);
+    *fetchProducts({ payload }, { call, put }) {
+      const response = yield call(getProducts, payload);
       yield put({
         type: 'saveProducts',
         payload: response,
@@ -24,8 +29,14 @@ const ProductsModel = {
   },
   reducers: {
     saveProducts(state, action) {
-      return { ...state, productsList: action.payload || [] };
+      return { ...state, productsList: action.payload.items || [], pagingConfig: {...state.pagingConfig, total: action.payload.totalRecords} };
     },
+    updateConfig(state, action) {
+      return {
+        ...state,
+        pagingConfig: action.payload,
+      }
+    }
   },
 };
 export default ProductsModel;

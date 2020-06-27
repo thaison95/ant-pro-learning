@@ -12,8 +12,10 @@ const ProductsPage = (props) => {
   useEffect(() => {
     const { dispatch } = props;
     dispatch({
-      type: 'products/fetchProducts'
+      type: 'products/fetchProducts',
+      payload: props.pagingConfig,
     });
+    console.log('zzzzz')
   }, []);
 
   useEffect(() => {
@@ -39,9 +41,22 @@ const ProductsPage = (props) => {
     const { dispatch } = props;
     dispatch({
       type: 'products/createProduct',
-      payload: values
+      payload: values,
     });
   };
+
+  const onPaging = current => {
+    const { dispatch } = props;
+    dispatch({
+      type: 'products/fetchProducts',
+      payload: { ...props.pagingConfig, current },
+    });
+    // update store
+    dispatch({
+      type: 'products/updateConfig',
+      payload: { ...props.pagingConfig, current },
+    });
+  }
 
   return (
     <PageHeaderWrapper>
@@ -49,7 +64,16 @@ const ProductsPage = (props) => {
         <Button type="primary" onClick={() => setVisible(true)}>
           New product
         </Button>
-        <ProductList productsList={props.productsList} />
+        <ProductList
+          productsList={props.productsList}
+          pagination={{
+            current: props.pagingConfig.current,
+            pageSize: props.pagingConfig.pageSize,
+            total: props.pagingConfig.total,
+          }}
+          onPaging={onPaging}
+          loading={props.tableLoading}
+        />
       </Space>
       <CreateUpdateProduct
         visible={visible}
@@ -66,5 +90,6 @@ const ProductsPage = (props) => {
 export default connect(({ products, loading }) => ({
   productsList: products.productsList,
   tableLoading: loading.effects['products/fetchProducts'],
+  pagingConfig: products.pagingConfig,
   lastAction: products.lastAction,
 }))(ProductsPage);
