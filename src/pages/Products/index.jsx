@@ -15,7 +15,6 @@ const ProductsPage = (props) => {
       type: 'products/fetchProducts',
       payload: props.pagingConfig,
     });
-    console.log('zzzzz')
   }, []);
 
   useEffect(() => {

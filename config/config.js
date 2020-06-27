@@ -10,11 +10,11 @@ export default defineConfig({
     hmr: true,
   },
   locale: {
-    // default zh-CN
+    // default en-US
     default: 'en-US',
     // default true, when it is true, will use `navigator.language` overwrite default
-    antd: true,
-    baseNavigator: true,
+    antd: false,
+    baseNavigator: false,
   },
   dynamicImport: {
     loading: '@/components/PageLoading/index',
@@ -77,13 +77,13 @@ export default defineConfig({
               component: './ListTableList',
             },
             {
-              name: 'Products',
+              name: 'products',
               icon: 'smile',
               path: '/products',
               component: './Products',
             },
             {
-              name: 'Products Pro',
+              name: 'products-pro',
               icon: 'appstore',
               path: '/products-pro',
               component: './ProductsPro',

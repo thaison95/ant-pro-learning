@@ -1,7 +1,7 @@
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import { fakeAccountLogin } from '@/services/login';
-import { setAuthority, setAccessToken } from '@/utils/authority';
+import { setAuthority, setAccessToken, clearCredential } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { setTokenHeader } from '@/utils/request';
 
@@ -43,6 +43,9 @@ const Model = {
     },
 
     logout() {
+
+      clearCredential();
+
       const { redirect } = getPageQuery(); // Note: There may be security issues, please note
 
       if (window.location.pathname !== '/user/login' && !redirect) {

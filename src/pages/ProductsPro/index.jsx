@@ -39,10 +39,10 @@ const columns = [
 
 const ProductsPro = (props) => {
   useEffect(() => {
-    const { dispatch } = props;
-    dispatch({
-      type: 'products/fetchProducts',
-    });
+    // const { dispatch } = props;
+    // dispatch({
+    //   type: 'products/fetchProducts',
+    // });
   }, []);
 
   return (

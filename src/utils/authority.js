@@ -1,4 +1,5 @@
-import { reloadAuthorized } from './Authorized'; // use localStorage to store the authority info, which might be sent from server in actual project.
+import { setTokenHeader } from '@/utils/request'; // use localStorage to store the authority info, which might be sent from server in actual project.
+import { reloadAuthorized } from './Authorized';
 
 export function getAuthority(str) {
   const authorityString =
@@ -33,10 +34,15 @@ export function setAuthority(authority) {
 }
 
 export function getAccessToken() {
-  const accessToken = localStorage.getItem('access_token') || '';
-  return accessToken;
+  return localStorage.getItem('access_token') || '';
 }
 
 export function setAccessToken(token) {
   localStorage.setItem('access_token', token);
+}
+
+export function clearCredential() {
+  localStorage.setItem('access_token', null);
+  localStorage.setItem('antd-pro-authority', null);
+  setTokenHeader('');
 }
