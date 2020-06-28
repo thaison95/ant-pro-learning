@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Button, Space } from 'antd';
 import { connect } from 'umi';
-import { PropertySafetyFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const columns = (onEdit, onDelete) => [
   {
@@ -55,7 +55,7 @@ const ProductList = (props) => {
   const onTableChange = (pagination) => {
     console.log(pagination);
     props.onPaging(pagination.current);
-  }
+  };
 
   return (
     <>

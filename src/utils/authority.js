@@ -1,6 +1,6 @@
 import { setTokenHeader } from '@/utils/request';
 import request from 'umi-request';
-import { reloadAuthorized, reloadToken } from './Authorized';
+import { reloadAuthorized } from './Authorized';
 import { history } from 'umi';
 
 export function getAuthority(str) {
@@ -49,12 +49,12 @@ export function refreshTokenFunc() {
         refreshToken,
       },
     })
-    .then(response => {
+    .then((response) => {
       setCredential(response.token, response.refreshToken);
       // reloadToken();
       history.go(0);
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
     });
 }

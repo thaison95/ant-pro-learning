@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { Button, Space } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import ProTable from '@ant-design/pro-table';
 import { connect } from 'umi';
 

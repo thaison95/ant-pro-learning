@@ -1,8 +1,7 @@
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { useState, useEffect } from 'react';
-import { Spin, Button, Space } from 'antd';
+import { Button, Space } from 'antd';
 import { connect } from 'umi';
-import styles from './index.less';
 import ProductList from './components/ProductsList';
 import CreateUpdateProduct, { MODE } from './components/CreateUpdateProduct';
 
@@ -44,7 +43,7 @@ const ProductsPage = (props) => {
     });
   };
 
-  const onPaging = current => {
+  const onPaging = (current) => {
     const { dispatch } = props;
     dispatch({
       type: 'products/fetchProducts',
@@ -55,7 +54,7 @@ const ProductsPage = (props) => {
       type: 'products/updateConfig',
       payload: { ...props.pagingConfig, current },
     });
-  }
+  };
 
   return (
     <PageHeaderWrapper>
@@ -80,7 +79,7 @@ const ProductsPage = (props) => {
         onSubmit={onSubmit}
         // editData={this.state.editData}
         mode={MODE.CREATE}
-        //modalLoading={this.props.modalLoading}
+        // modalLoading={this.props.modalLoading}
       />
     </PageHeaderWrapper>
   );
