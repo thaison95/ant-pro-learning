@@ -1,7 +1,6 @@
 import { setTokenHeader } from '@/utils/request';
 import request from 'umi-request';
 import { reloadAuthorized } from './Authorized';
-import { history } from 'umi';
 
 export function getAuthority(str) {
   const authorityString =
@@ -39,10 +38,10 @@ export function getAccessToken() {
   return localStorage.getItem('access_token') || '';
 }
 
-export function refreshTokenFunc() {
+export async function refreshTokenFunc() {
   const accessToken = getAccessToken();
   const refreshToken = localStorage.getItem('refresh_token');
-  request
+  await request
     .post('/api/Users/refresh-token', {
       data: {
         token: accessToken,
@@ -51,11 +50,10 @@ export function refreshTokenFunc() {
     })
     .then((response) => {
       setCredential(response.token, response.refreshToken);
-      // reloadToken();
-      history.go(0);
     })
-    .catch((error) => {
-      console.log(error);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .catch((err) => {
+      // do not show err here
     });
 }
 
