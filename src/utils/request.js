@@ -4,7 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-import { getAccessToken } from '@/utils/authority';
+import { getAccessToken, refreshTokenFunc } from '@/utils/authority';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -31,10 +31,17 @@ const errorHandler = (error) => {
   const { response } = error;
 
   if (response && response.status) {
+
+    // expired token
+    if (response.status === 401 && response.headers.get('token-expired') === 'True') {
+      console.log(response.headers.get('token-expired'));
+      refreshTokenFunc();
+    }
+
     const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+    const { status } = response;
     notification.error({
-      message: `Request error ${status}: ${url}`,
+      message: `Request error ${status}: `,
       description: errorText,
     });
   } else if (!response) {

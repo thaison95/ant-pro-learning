@@ -24,7 +24,7 @@ const UserModel = {
   },
   reducers: {
     saveCurrentUser(state, action) {
-      return { ...state, currentUser: action.payload.resultObj || {} };
+      return { ...state, currentUser: action.payload || {} };
     },
 
     changeNotifyCount(

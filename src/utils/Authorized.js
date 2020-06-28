@@ -1,4 +1,4 @@
-import RenderAuthorize from '@/components/Authorized';
+import RenderAuthorize, {RenderToken} from '@/components/Authorized';
 import { getAuthority } from './authority';
 /* eslint-disable eslint-comments/disable-enable-pair */
 
@@ -9,6 +9,11 @@ let Authorized = RenderAuthorize(getAuthority()); // Reload the rights component
 const reloadAuthorized = () => {
   Authorized = RenderAuthorize(getAuthority());
 };
+
+const reloadToken = () => {
+  Authorized = RenderToken();
+};
+
 /**
  * hard code
  * block need it。
@@ -16,4 +21,6 @@ const reloadAuthorized = () => {
 
 window.reloadAuthorized = reloadAuthorized;
 export { reloadAuthorized };
+window.reloadToken = reloadToken;
+export { reloadToken };
 export default Authorized;
