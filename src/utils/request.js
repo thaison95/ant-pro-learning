@@ -5,6 +5,8 @@
 import { extend } from 'umi-request';
 import { notification } from 'antd';
 import { getAccessToken, refreshTokenFunc } from '@/utils/authority';
+import jwtDecode from 'jwt-decode';
+import moment from 'moment';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -31,13 +33,6 @@ const errorHandler = (error) => {
   const { response } = error;
 
   if (response && response.status) {
-
-    // expired token
-    if (response.status === 401 && response.headers.get('token-expired') === 'True') {
-      console.log(response.headers.get('token-expired'));
-      refreshTokenFunc();
-    }
-
     const errorText = codeMessage[response.status] || response.statusText;
     const { status } = response;
     notification.error({
@@ -56,7 +51,6 @@ const errorHandler = (error) => {
 /**
  * 配置request请求时的默认参数
  */
-const accessToken = getAccessToken();
 
 const request = extend({
   errorHandler,
@@ -64,10 +58,35 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 
-if (getAccessToken) {
+request.use(async (ctx, next) => {
+  const { req } = ctx;
+  const { options } = req;
+  // if header have token
+  if (options.headers.Authorization && options.headers.Authorization.length > 7) {
+    // remove 'Bearer' and decode jwt
+    const jwtDecoded = jwtDecode(options.headers.Authorization.substring(7));
+    // if token expired
+    if (jwtDecoded && moment().isAfter(moment.unix(jwtDecoded.exp))) {
+      // jwtDecoded.exp format is Unix Timestamp (seconds)
+      await refreshTokenFunc();
+      const newToken = getAccessToken();
+      if (newToken) {
+        ctx.req.options = {
+          ...options,
+          headers: {
+            Authorization: `Bearer ${newToken}`,
+          },
+        };
+      }
+    }
+  }
+  await next();
+});
+
+if (getAccessToken()) {
   request.extendOptions({
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${getAccessToken()}`,
     },
   });
 }
