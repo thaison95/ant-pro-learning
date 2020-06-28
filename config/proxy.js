@@ -7,8 +7,8 @@
  */
 export default {
   dev: {
-    '/users': {
-      target: 'https://5ed3109c717d5f001651847c.mockapi.io',
+    '/api': {
+      target: 'https://reactapitest.azurewebsites.net',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

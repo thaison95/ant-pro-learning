@@ -1,56 +1,60 @@
 import React from 'react';
-import { Table, Button } from 'antd';
-import {connect} from 'umi';
-import { PropertySafetyFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Table, Button, Space } from 'antd';
+import { connect } from 'umi';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const columns = (onEdit, onDelete) => [
   {
-    title: "Name",
-    dataIndex: "name",
+    title: 'Name',
+    dataIndex: 'name',
     sorter: true,
   },
   {
-    title: "Day of birth",
-    dataIndex: "dayOfBirth",
+    title: 'Price',
+    dataIndex: 'price',
   },
   {
-    title: "Gender",
-    dataIndex: "gender",
+    title: 'Stock',
+    dataIndex: 'stock',
   },
   {
-    title: "Email",
-    dataIndex: "email",
+    title: 'View count',
+    dataIndex: 'viewCount',
   },
   {
-    title: "",
-    dataIndex: "",
+    title: '',
+    dataIndex: '',
     render: (value, row) => (
       <>
-        <Button
-          onClick={() => onEdit(row)}
-          className="mr-2"
-          icon={<EditOutlined />}
-        />
-        <Button onClick={() => onDelete(row)} icon={<DeleteOutlined />} />
+        <Space>
+          <Button onClick={() => onEdit(row)} className="mr-2" icon={<EditOutlined />} />
+          <Button onClick={() => onDelete(row)} icon={<DeleteOutlined />} />
+        </Space>
       </>
     ),
   },
 ];
 
-const ProductList = props => {
-
+const ProductList = (props) => {
   const onEditRow = (row) => {
-    console.log("edit", row);
+    console.log('edit', row);
     // this.setState({ visible: true, editData: row });
   };
 
   const onDeleteRow = (row) => {
-    const {dispatch} = props;
-    // console.log("delete", row, props);
+    const { dispatch } = props;
     dispatch({
       type: 'products/deleteProduct',
       payload: row.id,
+      onComplete: (res) => {
+        console.log(res);
+      },
     });
+  };
+
+  const onTableChange = (pagination) => {
+    console.log(pagination);
+    props.onPaging(pagination.current);
   };
 
   return (
@@ -59,6 +63,9 @@ const ProductList = props => {
         rowKey="id"
         columns={columns(onEditRow, onDeleteRow)}
         dataSource={props.productsList}
+        onChange={onTableChange}
+        pagination={props.pagination}
+        loading={props.loading}
       />
     </>
   );

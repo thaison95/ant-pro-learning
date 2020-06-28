@@ -1,4 +1,7 @@
-import { reloadAuthorized } from './Authorized'; // use localStorage to store the authority info, which might be sent from server in actual project.
+import { setTokenHeader } from '@/utils/request';
+import request from 'umi-request';
+import { reloadAuthorized } from './Authorized';
+import { history } from 'umi';
 
 export function getAuthority(str) {
   const authorityString =
@@ -30,4 +33,41 @@ export function setAuthority(authority) {
   localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority)); // auto reload
 
   reloadAuthorized();
+}
+
+export function getAccessToken() {
+  return localStorage.getItem('access_token') || '';
+}
+
+export function refreshTokenFunc() {
+  const accessToken = getAccessToken();
+  const refreshToken = localStorage.getItem('refresh_token');
+  request
+    .post('/api/Users/refresh-token', {
+      data: {
+        token: accessToken,
+        refreshToken,
+      },
+    })
+    .then((response) => {
+      setCredential(response.token, response.refreshToken);
+      // reloadToken();
+      history.go(0);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export function setCredential(token, refreshToken) {
+  localStorage.setItem('access_token', token);
+  localStorage.setItem('refresh_token', refreshToken);
+  setTokenHeader(token);
+}
+
+export function clearCredential() {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  localStorage.removeItem('antd-pro-authority');
+  setTokenHeader('');
 }

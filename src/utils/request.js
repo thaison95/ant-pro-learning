@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { getAccessToken, refreshTokenFunc } from '@/utils/authority';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -20,20 +21,27 @@ const codeMessage = {
   500: '服务器发生错误，请检查服务器。',
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
-  504: '网关超时。',
+  504: 'Gateway timeout.',
 };
 /**
  * 异常处理程序
  */
 
-const errorHandler = error => {
+const errorHandler = (error) => {
   const { response } = error;
 
   if (response && response.status) {
+
+    // expired token
+    if (response.status === 401 && response.headers.get('token-expired') === 'True') {
+      console.log(response.headers.get('token-expired'));
+      refreshTokenFunc();
+    }
+
     const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+    const { status } = response;
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
+      message: `Request error ${status}: `,
       description: errorText,
     });
   } else if (!response) {
@@ -48,10 +56,28 @@ const errorHandler = error => {
 /**
  * 配置request请求时的默认参数
  */
+const accessToken = getAccessToken();
 
 const request = extend({
   errorHandler,
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
+
+if (getAccessToken) {
+  request.extendOptions({
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+export const setTokenHeader = (token) => {
+  request.extendOptions({
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export default request;

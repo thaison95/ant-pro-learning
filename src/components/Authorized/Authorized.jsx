@@ -13,6 +13,7 @@ const Authorized = ({
     />
   ),
 }) => {
+  console.log('re-render Authorized');
   const childrenRender = typeof children === 'undefined' ? null : children;
   const dom = check(authority, childrenRender, noMatch);
   return <>{dom}</>;

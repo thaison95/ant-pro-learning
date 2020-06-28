@@ -121,7 +121,6 @@ const Login = props => {
 };
 
 export default connect(({ login, loading }) => {
-  console.log(loading);
   return {
     userLogin: login,
     submitting: loading.effects['login/login'],
